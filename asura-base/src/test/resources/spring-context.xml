@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--配置MessageSource-->
+    <bean id="region.messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:message_validator</value>
+                <value>classpath:message/asura-base-message.properties</value>
+            </list>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="false"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="60"/>
+    </bean>
+
+    <!--配置参数校验-->
+    <bean id="region.validatorFactory"
+          class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+        <property name="validationMessageSource" ref="region.messageSource"/>
+    </bean>
+
+    <bean id="region.validator" factory-bean="region.validatorFactory"
+          factory-method="getValidator"/>
+
+    <bean id="regionProvider.paramCheckLogic" class="com.asura.framework.base.logic.ParamCheckLogic" scope="singleton">
+        <property name="messageSource" ref="region.messageSource" />
+        <property name="validator" ref="region.validator" />
+    </bean>
+</beans>

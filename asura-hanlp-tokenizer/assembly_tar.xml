@@ -1,0 +1,34 @@
+<assembly xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/assembly-1.0.0.xsd">
+    <id>0.1</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.outputDirectory}</directory>
+            <includes>
+                <include>hanlp-hot-update.cfg.xml</include>
+                <include>plugin-descriptor.properties</include>
+                <include>plugin-security.policy</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <outputDirectory>HanLP/</outputDirectory>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>HanLP/</outputDirectory>
+            <includes>
+                <include>com.asura:com-asura-framework-base</include>
+                <include>com.hankcs:hanlp</include>
+                <include>org.apache.httpcomponents:httpclient</include>
+                <include>org.apache.httpcomponents:httpcore</include>
+                <include>commons-logging:commons-logging</include>
+                <include>commons-codec:commons-codec</include>
+                <include>com.asura:com-asura-framework-hanlp-tokenizer</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+</assembly>

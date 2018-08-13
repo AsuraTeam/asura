@@ -1,0 +1,12 @@
+# example: fieldName@type
+lore_group_id@String
+correlation_group_id@String
+# default
+cid@Integer
+logic_code@String
+create_time@Long
+create_user_code@String
+last_modify_time@Long
+modify_user_code@String
+is_enable@EnableType
+is_delete@Integer

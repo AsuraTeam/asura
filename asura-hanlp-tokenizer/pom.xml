@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>asura</artifactId>
+        <groupId>com.asura</groupId>
+        <version>0.0.9-RC4</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>jar</packaging>
+
+    <name>asura-hanlp-tokenizer</name>
+    <artifactId>com-asura-framework-hanlp-tokenizer</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.asura</groupId>
+            <artifactId>com-asura-framework-base</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <debug>true</debug>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <excludes>hanlp-hot-update.cfg.xml</excludes>
+                        <excludes>plugin-descriptor.properties</excludes>
+                        <excludes>plugin-security.policy</excludes>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>make-tar-gz</id>
+                        <!-- 随便一个名字 -->
+                        <phase>package</phase>
+                        <!-- 绑定到package生命周期阶段上 -->
+                        <goals>
+                            <goal>single</goal>
+                            <!-- 只运行一次 -->
+                        </goals>
+                        <configuration>
+                            <skipAssembly>false</skipAssembly>
+                            <!-- 跳过这个执行器 -->
+                            <finalName>asura-hanlp-tokenizer</finalName>
+                            <!-- 描述符文件 -->
+                            <descriptors>
+                                <descriptor>assembly_tar.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,59 @@
+/**
+ * @FileName: {tableName}InnerService.java
+ * @Package: com.ziroom.{systemName}.{moduleName}.api.inner
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{moduleName}.api.inner;
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+public interface {tableName}InnerService {
+    /**
+     * search {tableName}
+     * @param optionsString
+     * @return
+     */
+    String search(String optionsString);
+
+    /**
+     * insert {tableName}
+     * @param requestString
+     * @return
+     */
+    String insert(String requestString);
+
+    /**
+     * update {tableName}
+     * @param requestString
+     * @return
+     */
+    String update(String requestString);
+
+    /**
+     * find {tableName} by logicCode
+     * @param logicCode
+     * @return
+     */
+    String findByLogicCode(String logicCode);
+
+    /**
+     * {tableName} soft delete
+     * @param requestString
+     * @return
+     */
+    String softDelete(String requestString);
+}

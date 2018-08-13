@@ -1,0 +1,70 @@
+/**
+ * @FileName: {tableName}DubboService.java
+ * @Package: com.ziroom.{systemName}.{webModuleName}.service.dubbo
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{webModuleName}.service.dubbo;
+
+import com.alibaba.fastjson.JSONObject;
+import com.asura.framework.base.paging.PagingResult;
+import com.asura.framework.base.util.DataTransferObjectJsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.ziroom.{systemName}.entity.{tableName}Entity;
+import com.ziroom.{systemName}.{moduleName}.api.inner.{tableName}InnerService;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}DeleteRequest;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}InsertRequest;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}UpdateRequest;
+import com.ziroom.{systemName}.{moduleName}.entity.options.{tableName}SearchOptions;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+@Service("{webStandardName}.{tableLittleName}DubboService")
+public class {tableName}DubboService {
+
+    @Resource(name = "{systemName}.{standardName}.{tableLittleName}InnerService")
+    private {tableName}InnerService {tableLittleName}InnerService;
+
+    public PagingResult<{tableName}Entity> search({tableName}SearchOptions options) {
+        String resultsString = {tableLittleName}InnerService.search(JSONObject.toJSONString(options));
+        return DataTransferObjectJsonParser.getValueFromDataByKey(
+                resultsString, "data", new TypeReference<PagingResult<{tableName}Entity>>(){}
+        );
+    }
+
+    public {tableName}Entity findByLogicCode(String logicCode) {
+        String resultsString = {tableLittleName}InnerService.findByLogicCode(logicCode);
+        return DataTransferObjectJsonParser.getValueFromDataByKey(resultsString, "data", {tableName}Entity.class);
+    }
+
+    public {tableName}Entity insert({tableName}InsertRequest request) {
+        String resultsString = {tableLittleName}InnerService.insert(JSONObject.toJSONString(request));
+        return DataTransferObjectJsonParser.getValueFromDataByKey(resultsString, "data", {tableName}Entity.class);
+    }
+
+    public void update({tableName}UpdateRequest request) {
+        String resultsString = {tableLittleName}InnerService.update(JSONObject.toJSONString(request));
+        DataTransferObjectJsonParser.assertSOAReturnSuccess(resultsString);
+    }
+
+    public void softDelete({tableName}DeleteRequest request) {
+        String resultsString = {tableLittleName}InnerService.softDelete(JSONObject.toJSONString(request));
+        DataTransferObjectJsonParser.assertSOAReturnSuccess(resultsString);
+    }
+}

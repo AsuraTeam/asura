@@ -1,0 +1,51 @@
+/**
+ * @FileName: {tableName}DeleteRequest.java
+ * @Package: com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym};
+
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+public class {tableName}DeleteRequest {
+    @NotNull(message = "{logicCodes.null}")
+    private List<String> logicCodes;
+
+    @NotBlank(message = "{operatorCode.null}")
+    private String operatorCode;
+
+    public List<String> getLogicCodes() {
+        return logicCodes;
+    }
+
+    public void setLogicCodes(List<String> logicCodes) {
+        this.logicCodes = logicCodes;
+    }
+
+    public String getOperatorCode() {
+        return operatorCode;
+    }
+
+    public void setOperatorCode(String operatorCode) {
+        this.operatorCode = operatorCode;
+    }
+}

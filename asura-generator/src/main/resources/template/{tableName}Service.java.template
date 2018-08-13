@@ -1,0 +1,60 @@
+/**
+ * @FileName: {tableName}Service.java
+ * @Package: com.ziroom.{systemName}.{moduleName}.service
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{moduleName}.service;
+
+import com.asura.framework.base.paging.PagingResult;
+import com.ziroom.{systemName}.entity.{tableName}Entity;
+import com.ziroom.{systemName}.{moduleName}.dao.{tableName}Dao;
+import com.ziroom.{systemName}.{moduleName}.entity.options.{tableName}SearchOptions;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+@Component("{standardName}.{tableLittleName}Service")
+public class {tableName}Service {
+
+    @Resource(name = "{standardName}.{tableLittleName}Dao")
+    private {tableName}Dao {tableLittleName}Dao;
+
+    public PagingResult<{tableName}Entity> search({tableName}SearchOptions options) {
+        return {tableLittleName}Dao.search(options);
+    }
+
+    public {tableName}Entity findByLogicCode(String logicCode) {
+        return {tableLittleName}Dao.findByLogicCode(logicCode);
+    }
+
+    public {tableName}Entity insert({tableName}Entity entity) {
+        return {tableLittleName}Dao.insert(entity);
+    }
+
+    public void update({tableName}Entity entity) {
+        {tableLittleName}Dao.update(entity);
+    }
+
+    public void softDelete(List<String> logicCodes, String operatorCode) {
+        for (String logicCode : logicCodes) {
+            {tableLittleName}Dao.softDelete(logicCode, operatorCode);
+        }
+    }
+}

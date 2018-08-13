@@ -1,0 +1,154 @@
+/**
+ * @FileName: {tableName}Controller.java
+ * @Package: com.ziroom.{systemName}.{webModuleName}.controller
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{webModuleName}.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.asura.framework.base.paging.PagingResult;
+import com.asura.framework.commons.util.Check;
+import com.asura.framework.base.exception.BusinessException;
+import com.ziroom.{systemName}.entity.{tableName}Entity;
+import com.ziroom.{systemName}.{webModuleName}.entity.request.{tableName}WriteRequest;
+import com.ziroom.{systemName}.{webModuleName}.entity.value.{tableName}Value;
+import com.ziroom.{systemName}.{webModuleName}.service.{tableName}Service;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}DeleteRequest;
+import com.ziroom.{systemName}.{moduleName}.entity.options.{tableName}SearchOptions;
+import org.hpin.orgMgt.entity.UserAccount;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+@Controller("{tableLittleName}Controller")
+@RequestMapping("/{requestBaseUrl}/{tableLittleName}s")
+public class {tableName}Controller {
+
+    private Logger logger = LoggerFactory.getLogger({tableName}Controller.class);
+
+    @Resource(name = "{webStandardName}.{tableLittleName}Service")
+    private {tableName}Service {tableLittleName}Service;
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView toList(HttpSession session) throws BusinessException {
+        try {
+            ModelAndView model = new ModelAndView();
+            model.setViewName("{webModuleName}/{tableLittleName}/{tableLittleName}List");
+            return model;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new BusinessException("forward {tableLittleName} list page error [" + e.getMessage() + "].", e);
+        }
+    }
+
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    public ModelAndView toDetail(HttpSession session, HttpServletRequest request) throws BusinessException {
+        try {
+            ModelAndView model = new ModelAndView();
+
+            String logicCode = request.getParameter("logicCode");
+
+            if (!Check.isNullOrEmpty(logicCode)) {
+                final {tableName}Entity {tableLittleName} = {tableLittleName}Service.findByLogicCode(logicCode);
+                model.addObject("{tableLittleName}", {tableLittleName});
+            }
+
+            model.setViewName("{webModuleName}/{tableLittleName}/{tableLittleName}Detail");
+            return model;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new BusinessException("forward {tableLittleName} detail page error [" + e.getMessage() + "].", e);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    public PagingResult<{tableName}Value> search(HttpServletRequest request) throws BusinessException {
+        try {
+            {tableName}SearchOptions options = new {tableName}SearchOptions();
+            String pageNumber = request.getParameter("page");
+            String pageSize = request.getParameter("rows");
+            if (!Check.isNullOrEmpty(pageNumber)) {
+                options.setPageNumber(Integer.parseInt(pageNumber) - 1);
+            }
+            if (!Check.isNullOrEmpty(pageSize)) {
+                options.setPageSize(Integer.parseInt(pageSize));
+            }
+            final PagingResult<{tableName}Value> results = {tableLittleName}Service.searchForView(options);
+            return results;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new BusinessException("search {tableName} error [" + e.getMessage() + "].", e);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/searchForView", method = RequestMethod.POST)
+    public PagingResult<{tableName}Value> searchForView(@RequestBody String requestBody) throws BusinessException {
+        try {
+            final {tableName}SearchOptions options = JSONObject.parseObject(requestBody, {tableName}SearchOptions.class);
+            return {tableLittleName}Service.searchForView(options);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new BusinessException("search {tableName} for view error [" + e.getMessage() + "].", e);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    public HashMap<String, Object> insertOrUpdate(HttpSession session, @RequestBody String requestBody) throws BusinessException {
+        try {
+            final {tableName}WriteRequest writeRequest = JSONObject.parseObject(requestBody, {tableName}WriteRequest.class);
+            UserAccount userAccount = (UserAccount) session.getAttribute("currentUser");//获取当前用户
+            writeRequest.setOperatorCode(userAccount.getLinkEmployee().getCode());
+            {tableLittleName}Service.insertOrUpdate(writeRequest);
+            return new HashMap<String, Object>(){{
+                put("status", "success");
+            }};
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new BusinessException("insert or update {tableName} error [" + e.getMessage() + "].", e);
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/softDelete", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.PUT)
+    public HashMap<String, Object> softDelete(HttpSession session, @RequestBody String requestBody) throws BusinessException {
+        try {
+            final {tableName}DeleteRequest deleteRequest = JSONObject.parseObject(requestBody, {tableName}DeleteRequest.class);
+            UserAccount userAccount = (UserAccount) session.getAttribute("currentUser");//获取当前用户
+            deleteRequest.setOperatorCode(userAccount.getLinkEmployee().getCode());
+            {tableLittleName}Service.softDelete(deleteRequest);
+            return new HashMap<String, Object>(){{
+                put("status", "success");
+            }};
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new BusinessException("soft delete {tableName} error [" + e.getMessage() + "].", e);
+        }
+    }
+}

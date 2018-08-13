@@ -1,0 +1,106 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <%
+String path1 = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path1+"/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <%@ include file="/common/common.jsp" %>
+    <link href="${picPath}/css/default/base.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/rightpart.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/easyui.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/icon.css" rel="stylesheet" type="text/css"/>
+    <script src="${picPath}/jsLibs/jquery.metadata.js" type="text/javascript"></script>
+    <script src="${picPath}/jsLibs/jquery.validate.js" type="text/javascript"></script>
+    <script src="${picPath}/js/default_validate.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            validator = $("#form").validate();
+        });
+
+        function submitMe() {
+            if (validator.checkForm() == true) {
+                $("#sumBtn").attr('disabled', true);
+                save{tableName}();
+            }
+            validator.showErrors();
+            validator.showSuccess();
+        }
+
+        function save{tableName}() {
+//            if ($("#content").val().length > 255 || $("#content").val().length == 0 ) {
+//                alertInfo("内容必须在0~255个字符之间！");
+//                $("#sumBtn").attr('disabled', false);
+//                return false;
+//            }
+            var data = {};
+            $('#form').serializeArray().map(function(x){
+                data[x.name] = x.value;
+            });
+            $.ajax({
+                url: "${path}/{requestBaseUrl}/{tableLittleName}s/",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                type: "POST",
+                success: function (result) {
+                    alertInfo(OPRATION_SUCCESS);
+                    setTimeout(function(){
+                        parent.closeEasyuiWindowBox();
+                    },2000);
+                },
+                error: function(data) {
+                    alertWarning();
+                }
+            });
+        }
+
+    </script>
+
+</head>
+
+<body>
+<div class="w450">
+    <form id="form" method="post">
+        <div class="nobortable pd10">
+            <table width="500" border="1">
+                <tr>
+                    <td class="tr" width="100">编码：</td>
+                    <td width="300">
+                        <input name="logicCode" value="${{tableLittleName}.logicCode}" type="hidden"/>
+                        <input name="code" value="${{tableLittleName}.code}" class="{required:true,maxlength:500,messages:{required:'请输入编码'}} t_text w160 "/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tr" width="100">模板内容：</td>
+                    <td width="300">
+                        <textarea class="w_100 h50" name="content" id="content" cols="" rows="">${{tableLittleName}.content}</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tr" width="100">备注：</td>
+                    <td width="300">
+                        <input name="remark" value="${{tableLittleName}.remark}" class="t_text w160 "/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tr" width="400">
+                        <input type="button" value="提交" name="" id="sumBtn" class="t_btnsty01" onclick="submitMe();"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!--nobortable -->
+    </form>
+</div>
+</body>
+</html>

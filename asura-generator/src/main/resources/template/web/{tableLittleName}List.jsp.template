@@ -1,0 +1,172 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+    <%@ include file="/common/common.jsp"%>
+    <link href="${picPath}/css/default/base.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/rightpart.css?v=20160824" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/easyui.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/icon.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/base.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/rightpart.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/easyui.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/icon.css" rel="stylesheet" type="text/css"/>
+    <link href="${picPath}/css/default/tab.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="${picPath}/js/default_grid.js?v=1.0"></script>
+    <script src="${picPath}/jsLibs/jquery.tabsView.js" type="text/javascript"></script>
+    <script src="${picPath}/js/righttab.js" type="text/javascript"></script>
+    <script type="text/javascript" src="${picPath}/js/default_grid.js?v=1.0"></script>
+    <script type="text/javascript" src="${picPath}/js/common_sms2.js?v=20160714" language="javascript"></script>
+</head>
+<body>
+<div class="t_rightcontainer">
+    <div class="t_seartablebox mb10">
+        <div class="t_seartablebox_c">
+            <form id="searchForm">
+                <div class="t_searbox">
+                    <div class="nobortable pd10">
+                        <table width="850" border="0">
+                            <tr>
+                                <td width="100" class="tr">编码：</td>
+                                <td>
+                                    <input class="t_text w200" name="filter_and_code" type="text"/>
+                                </td>
+                                <td width="200" align="right">
+                                    <input class="t_btnsty01" id="find" type="button" value="查询" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div><!--nobortable -->
+                    <hr/>
+                    <div class="nobortable pd10">
+                        <input class="t_btnsty01" id="new" type="button" value="新增" onclick="insert{tableName}()"/>
+                        <input class="t_btnsty01" id="update" type="button" value="修改" onclick="update{tableName}()"/>
+                        <input class="t_btnsty01" id="delete" type="button" value="删除" onclick="delete{tableName}()"/>
+                    </div><!--nobortable -->
+                </div><!--t_searbox -->
+            </form>
+            <div class="hastable" style="height:500px">
+                <table id="dg"  data-options="
+						rownumbers:true,
+						fit:true,
+						autoRowHeight:true,
+						pagination:true,
+						pageNumber:1,
+						nowrap:false,
+						singleSelect:false,
+						pageSize:50,
+						url:'${path}/{requestBaseUrl}/{tableLittleName}s/search',
+						pageList:[10,30,50]">
+                    <thead>
+                    <tr>
+                        <th data-options="field:'ck',checkbox:true"></th>
+                        <th field="logicCode" data-options="hidden:true">logicCode</th>
+                        <th field="code" width="200" align="center" formatter="formatter">编码</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div><!--t_seartablebox_c -->
+    </div><!--t_seartablebox -->
+</div><!--t_rightcontainer -->
+<div id="detailWindowBox" class="easyui-window" data-options="modal:true,closed:true,minimizable:false,maximizable:false,collapsible:false"
+     style="padding: 10px; overflow:hidden;" >
+    <iframe id="detail_content" src="" scrolling="no" frameborder="0" width="600px" height="600px"></iframe>
+</div>
+<script type="text/javascript">
+
+    $(function(){
+        reLoadTable("dg");
+    });
+
+    function formatter(value, row, index) {
+        return value ? value.replace("<", "&lt;").replace(">", "&gt;") : "";
+    }
+
+    function getSelectionValue() {
+        var result = new Array();
+        var rows = $('#dg').datagrid('getSelections');
+        if (rows.length) {
+            $.each(rows, function(i, o) {
+                if (o.logicCode) {
+                    result.push(o.logicCode);
+                }
+            });
+        }
+        return result;
+    }
+
+    function insert{tableName}() {
+        write{tableName}();
+    }
+
+    function update{tableName}() {
+        var logicCodes = getSelectionValue();
+        if (logicCodes.length != 1) {
+            alertWarning("请选择一条记录！");
+            return false;
+        }
+        write{tableName}(logicCodes[0]);
+    }
+
+    function delete{tableName}() {
+        var logicCodes = getSelectionValue();
+        if (logicCodes.length == 0) {
+            alertWarning("请选择至少一条记录！");
+            return false;
+        }
+
+        alertConfirm("确定删除这" + ids.length + "项吗？", function() {
+            softDelete{tableName}(logicCodes);
+        });
+    }
+
+    function softDelete{tableName}(logicCodes) {
+        $.ajax({
+            url: "${path}/{requestBaseUrl}/{tableLittleName}s/softDelete",
+            data: JSON.stringify({"logicCodes": logicCodes}),
+            contentType: "application/json",
+            dataType: "json",
+            type: "PUT",
+            success: function (data) {
+                alertInfo(OPRATION_SUCCESS);
+                reLoadTable("dg");
+            },
+            error: function (msg) {
+                alertWarning(msg);
+            }
+        });
+    }
+
+    function write{tableName}(logicCode) {
+        var title = "新增";
+        var url = contextPath + "/{requestBaseUrl}/{tableLittleName}s/detail";
+        if (logicCode) {
+            title = "修改";
+            url += "?logicCode=" + logicCode;
+        }
+        $("#detail_content").attr("src", url);
+        $('#detailWindowBox').window({
+            height : '500',
+            width : '600',
+            title : title
+        });
+        $('.easyuiWindowButton').hide();
+        $('#detailWindowBox').window('open');
+        adjustTanboxCenter();
+    }
+
+    function closeEasyuiWindowBox() {
+        $("#detail_content").attr("src","");//重设页面
+        $('#detailWindowBox').window('close');
+        reLoadTable("dg");
+    }
+
+</script>
+</body>
+</html>

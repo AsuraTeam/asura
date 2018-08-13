@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="rabbitMqConfig" class="com.asura.framework.rabbitmq.RabbitMqConfig">
+        <property name="host" value="10.16.9.37,10.16.9.34"/>
+        <property name="port" value="5672"/>
+        <property name="userName" value="sms_rabbit_write"/>
+        <property name="password" value="sms_rabbit_write"/>
+        <property name="autoRecoveryEnable" value="1"/>
+        <property name="environment" value="t"/>
+    </bean>
+
+    <bean id="rabbitConnectionFactory" class="com.asura.framework.rabbitmq.connection.RabbitConnectionFactory" destroy-method="closeConnection">
+        <property name="rabbitMqConfig" ref="rabbitMqConfig"/>
+    </bean>
+
+    <bean id="rabbitSendClient" class="com.asura.framework.rabbitmq.send.RabbitMqSendClient"
+          destroy-method="closeChannel">
+        <property name="rabbitConnectionFactory" ref="rabbitConnectionFactory"/>
+    </bean>
+
+
+    <bean id="sampleMessageLitener" class="com.asura.framework.rabbbitmq.SampleMessageLitener"/>
+    <bean id="sampleMessageLitener2" class="com.asura.framework.rabbbitmq.SampleMessageLitener"/>
+
+
+    <bean id="sampleWorkerRec1" class="com.asura.framework.rabbitmq.receive.RabbitMqReceive"
+          init-method="consumerQueueMessage">
+        <constructor-arg index="0">
+            <ref bean="rabbitConnectionFactory"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <ref bean="sampleMessageLitener"/>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <value></value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="sampleWorkerRec3" class="com.asura.framework.rabbitmq.receive.RabbitMqReceive"
+          init-method="consumerQueueMessage">
+        <constructor-arg index="0">
+            <ref bean="rabbitConnectionFactory"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <ref bean="sampleMessageLitener"/>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <value></value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="sampleWorker2Rec" class="com.asura.framework.rabbitmq.receive.RabbitMqReceive"
+          init-method="consumerQueueMessage">
+        <constructor-arg index="0">
+            <ref bean="rabbitConnectionFactory"/>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <ref bean="sampleMessageLitener2"/>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <value>dayu_004</value>
+        </constructor-arg>
+    </bean>
+
+
+</beans>

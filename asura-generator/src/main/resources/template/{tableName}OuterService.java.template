@@ -1,0 +1,38 @@
+/**
+ * @FileName: {tableName}OuterService.java
+ * @Package: com.ziroom.{systemName}.{moduleName}.api.outer
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{moduleName}.api.outer;
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+public interface {tableName}OuterService {
+    /**
+     * search {tableName}
+     * @param optionsString
+     * @return
+     */
+    String search(String optionsString);
+
+    /**
+     * find {tableName} by logicCode
+     * @param logicCode
+     * @return
+     */
+    String findByLogicCode(String logicCode);
+}

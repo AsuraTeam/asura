@@ -1,0 +1,26 @@
+# provider
+{tableName}=CorrelationLore
+{tableNameAcronym}=correlationLore
+{tableLittleName}=correlationLore
+{author}=youshipeng
+{systemName}=zmc
+{moduleName}=services.knowledge
+{standardName}=knowledge
+
+# web
+{requestBaseUrl}=ZMC
+{webSystemName}=zmc
+{webModuleName}=lore
+{webStandardName}=lore
+
+# your replace atom
+
+# default
+#{dateTime} -> yyyy/MM/dd HH:mm:ss
+#{year} -> yyyy
+#{date} -> yyyy/MM/dd
+#{fieldsArea} -> all fields, getters and setters
+#{fieldsSQLArea} -> sql mapper.xml all fields: <sql id="columnList" > {fieldsSQLArea} </sql>
+#{insertSQLArea} -> sql mapper.xml insert sql
+#{updateSQLArea} -> sql mapper.xml update sql
+#{resultMapArea} -> sql mapper.xml result map sql

@@ -1,0 +1,82 @@
+/**
+ * @FileName: {tableName}Service.java
+ * @Package: com.ziroom.{systemName}.{webModuleName}.service
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{webModuleName}.service;
+
+import com.asura.framework.base.paging.PagingResult;
+import com.ziroom.{systemName}.entity.{tableName}Entity;
+import com.ziroom.{systemName}.{webModuleName}.entity.request.{tableName}WriteRequest;
+import com.ziroom.{systemName}.{webModuleName}.entity.value.{tableName}Value;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}DeleteRequest;
+import com.ziroom.{systemName}.{moduleName}.entity.options.{tableName}SearchOptions;
+
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+public interface {tableName}Service {
+
+    /**
+     * search {tableName}
+     * @param options
+     * @return
+     */
+    PagingResult<{tableName}Entity> search({tableName}SearchOptions options);
+
+    /**
+     * search {tableName}
+     * @param options
+     * @return
+     */
+    PagingResult<{tableName}Value> searchForView({tableName}SearchOptions options);
+
+    /**
+     * find {tableName} by logicCode
+     * @param logicCode
+     * @return
+     */
+    {tableName}Entity findByLogicCode(String logicCode);
+
+    /**
+     * insert {tableName}
+     * @param request
+     * @return
+     */
+    {tableName}Entity insert({tableName}WriteRequest request);
+
+    /**
+     * update {tableName}
+     * @param request
+     * @return
+     */
+    void update({tableName}WriteRequest request);
+
+    /**
+     * insert or update {tableName}
+     * @param request
+     * @return
+     */
+    void insertOrUpdate({tableName}WriteRequest request);
+
+    /**
+     * soft delete {tableName}
+     * @param request
+     * @return
+     */
+    void softDelete({tableName}DeleteRequest request);
+}

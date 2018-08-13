@@ -1,0 +1,96 @@
+/**
+ * @FileName: T_{tableName}Proxy.java
+ * @Package: com.ziroom.{systemName}.services.{moduleName}.proxy
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.services.{moduleName}.proxy;
+
+import com.alibaba.fastjson.JSON;
+import com.asura.framework.base.util.SOAResParseUtil;
+import com.ziroom.{systemName}.entity.{tableName}Entity;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}DeleteRequest;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}InsertRequest;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}UpdateRequest;
+import com.ziroom.{systemName}.{moduleName}.entity.options.{tableName}SearchOptions;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by youshipeng on 2016/8/3.
+ */
+@ContextConfiguration(locations={"classpath:META-INF/spring/applicationContext-{systemName}-{standardName}.xml",
+        "classpath:META-INF/spring/applicationContext-{systemName}-elasticsearch.xml",
+        "classpath:META-INF/spring/applicationContext-{systemName}-commons.xml",
+        "classpath:META-INF/spring/zmc-base-inner-consumer.xml",
+        "classpath:dubbo-consumer.xml"})
+@RunWith(SpringJUnit4ClassRunner.class)
+public class T_{tableName}Proxy {
+    @Resource(name = "{standardName}.{tableLittleName}Proxy")
+    private {tableName}Proxy {tableLittleName}Proxy;
+
+    @Test
+    public void testSearch() {
+        {tableName}SearchOptions options = new {tableName}SearchOptions();
+        String json = {tableLittleName}Proxy.search(JSON.toJSONString(options));
+        Assert.assertNotNull(json);
+    }
+
+    @Test
+    public void testFindByLogicCode() {
+        String json = {tableLittleName}Proxy.findByLogicCode("8a9e9b9658a5a0060158a5a006750000");
+        Assert.assertNotNull(json);
+    }
+
+    @Test
+    public void test_insert_update_delete() throws Exception {
+        {tableName}Entity entity1 = testInsert();
+        {tableName}Entity entity2 = testInsert();
+        if (entity1 != null) {
+            testUpdate(entity1.getLogicCode());
+            testDelete(new ArrayList<String>(){{
+                add(entity1.getLogicCode());
+            }});
+        }
+        if (entity2 != null) {
+            testUpdate(entity2.getLogicCode());
+            testDelete(new ArrayList<String>(){{
+                add(entity2.getLogicCode());
+            }});
+        }
+    }
+
+    public {tableName}Entity testInsert() throws Exception {
+        {tableName}InsertRequest insertRequest = new {tableName}InsertRequest();
+        insertRequest.setOperatorCode("20248067");
+        String json = {tableLittleName}Proxy.insert(JSON.toJSONString(insertRequest));
+        Assert.assertNotNull(json);
+        {tableName}Entity entity = SOAResParseUtil.getValueFromDataByKey(json, "data", {tableName}Entity.class);
+        return entity;
+    }
+
+    public void testUpdate(String logicCode) throws Exception {
+        {tableName}UpdateRequest updateRequest = new {tableName}UpdateRequest();
+        updateRequest.setOperatorCode("20248067");
+        updateRequest.setLogicCode(logicCode);
+        String json = {tableLittleName}Proxy.update(JSON.toJSONString(updateRequest));
+        Assert.assertNotNull(json);
+    }
+
+    public void testDelete(List<String> logicCodes) throws Exception {
+        {tableName}DeleteRequest deleteRequest = new {tableName}DeleteRequest();
+        deleteRequest.setLogicCodes(logicCodes);
+        deleteRequest.setOperatorCode("20248067");
+        String json = {tableLittleName}Proxy.softDelete(JSON.toJSONString(deleteRequest));
+        Assert.assertNotNull(json);
+    }
+}

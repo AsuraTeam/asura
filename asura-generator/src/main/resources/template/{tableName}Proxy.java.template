@@ -1,0 +1,137 @@
+/**
+ * @FileName: {tableName}Proxy.java
+ * @Package: com.ziroom.{systemName}.{moduleName}.proxy
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{moduleName}.proxy;
+
+import com.asura.framework.base.entity.DataTransferObject;
+import com.asura.framework.base.paging.PagingResult;
+import com.asura.framework.base.util.UUIDGenerator;
+import com.ziroom.{systemName}.commons.logic.ParamCheckLogic;
+import com.ziroom.{systemName}.commons.logic.ValidateResult;
+import com.ziroom.{systemName}.entity.{tableName}Entity;
+import com.ziroom.{systemName}.enums.EnableType;
+import com.ziroom.{systemName}.enums.DeleteType;
+import com.ziroom.{systemName}.{moduleName}.api.inner.{tableName}InnerService;
+import com.ziroom.{systemName}.{moduleName}.api.outer.{tableName}OuterService;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}DeleteRequest;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}InsertRequest;
+import com.ziroom.{systemName}.{moduleName}.dto.{tableNameAcronym}.{tableName}UpdateRequest;
+import com.ziroom.{systemName}.{moduleName}.entity.options.{tableName}SearchOptions;
+import com.ziroom.{systemName}.{moduleName}.service.{tableName}Service;
+import com.ziroom.{systemName}.commons.util.Utils;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+@Component("{standardName}.{tableLittleName}Proxy")
+public class {tableName}Proxy implements {tableName}InnerService, {tableName}OuterService {
+
+    @Resource(name = "{systemName}.common.paramCheckLogic")
+    private ParamCheckLogic paramCheckLogic;
+
+    @Resource(name = "{standardName}.{tableLittleName}Service")
+    private {tableName}Service {tableLittleName}Service;
+
+    @Override
+    public String search(String searchOptions) {
+        ValidateResult<{tableName}SearchOptions> validateResult =
+                paramCheckLogic.checkParamValidate(searchOptions, {tableName}SearchOptions.class);
+        if (!validateResult.isSuccess()) {
+            return validateResult.getDto().toJsonString();
+        }
+        {tableName}SearchOptions {tableLittleName}SearchOptions = validateResult.getResultObj();
+        PagingResult<{tableName}Entity> results = {tableLittleName}Service.search({tableLittleName}SearchOptions);
+        DataTransferObject dto = new DataTransferObject();
+        dto.putValue("data", results);
+        return dto.toJsonString();
+    }
+
+    @Override
+    public String insert(String requestString) {
+        ValidateResult<{tableName}InsertRequest> validateResult =
+                paramCheckLogic.checkParamValidate(requestString, {tableName}InsertRequest.class);
+        if (!validateResult.isSuccess()) {
+            return validateResult.getDto().toJsonString();
+        }
+        {tableName}InsertRequest insertRequest = validateResult.getResultObj();
+
+        {tableName}Entity result = {tableLittleName}Service.insert(parseEntity(insertRequest));
+        DataTransferObject dto = new DataTransferObject();
+        dto.putValue("data", result);
+        return dto.toJsonString();
+    }
+
+    @Override
+    public String update(String requestString) {
+        ValidateResult<{tableName}UpdateRequest> validateResult =
+                paramCheckLogic.checkParamValidate(requestString, {tableName}UpdateRequest.class);
+        if (!validateResult.isSuccess()) {
+            return validateResult.getDto().toJsonString();
+        }
+        {tableName}UpdateRequest updateRequest = validateResult.getResultObj();
+
+        {tableLittleName}Service.update(parseEntity(updateRequest));
+        DataTransferObject dto = new DataTransferObject();
+        return dto.toJsonString();
+    }
+
+    @Override
+    public String findByLogicCode(String logicCode) {
+        {tableName}Entity results = {tableLittleName}Service.findByLogicCode(logicCode);
+        DataTransferObject dto = new DataTransferObject();
+        dto.putValue("data", results);
+        return dto.toJsonString();
+    }
+
+    @Override
+    public String softDelete(String requestString) {
+        ValidateResult<{tableName}DeleteRequest> validateResult =
+                paramCheckLogic.checkParamValidate(requestString, {tableName}DeleteRequest.class);
+        if (!validateResult.isSuccess()) {
+            return validateResult.getDto().toJsonString();
+        }
+        {tableName}DeleteRequest deleteRequest = validateResult.getResultObj();
+
+        {tableLittleName}Service.softDelete(deleteRequest.getLogicCodes(), deleteRequest.getOperatorCode());
+        DataTransferObject dto = new DataTransferObject();
+        return dto.toJsonString();
+    }
+
+    private {tableName}Entity parseEntity({tableName}InsertRequest request) {
+        {tableName}Entity entity = new {tableName}Entity();
+        entity.setLogicCode(UUIDGenerator.hexUUID());
+        entity.setCreateTime(Utils.nowTime());
+        entity.setLastModifyTime(Utils.nowTime());
+        entity.setCreateUserCode(request.getOperatorCode());
+        entity.setModifyUserCode(request.getOperatorCode());
+        entity.setIsDelete(DeleteType.FALSE.getId());
+        entity.setIsEnable(EnableType.TRUE);
+        return entity;
+    }
+
+    private {tableName}Entity parseEntity({tableName}UpdateRequest request) {
+        {tableName}Entity entity = new {tableName}Entity();
+        entity.setLogicCode(request.getLogicCode());
+        entity.setLastModifyTime(Utils.nowTime());
+        entity.setModifyUserCode(request.getOperatorCode());
+        return entity;
+    }
+}

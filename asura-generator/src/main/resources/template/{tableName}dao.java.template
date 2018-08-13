@@ -1,0 +1,66 @@
+/**
+ * @FileName: {tableName}Dao.java
+ * @Package: com.ziroom.{systemName}.{moduleName}.dao
+ * @author {author}
+ * @created {dateTime}
+ * <p>
+ * Copyright {year} ziroom
+ */
+package com.ziroom.{systemName}.{moduleName}.dao;
+
+import com.asura.framework.base.paging.PagingResult;
+import com.asura.framework.dao.mybatis.base.MybatisDaoContext;
+import com.ziroom.{systemName}.entity.{tableName}Entity;
+import com.ziroom.{systemName}.{moduleName}.entity.options.{tableName}SearchOptions;
+import com.ziroom.{systemName}.commons.util.Utils;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
+
+import static com.ziroom.{systemName}.{moduleName}.utils.PageUtils.parsePageBounds;
+
+/**
+ * <p></p>
+ *
+ * <PRE>
+ * <BR>	修改记录
+ * <BR>-----------------------------------------------
+ * <BR>	修改日期			修改人			修改内容
+ * </PRE>
+ *
+ * @author {author}
+ * @since 1.0
+ * @version 1.0
+ */
+@Repository("{standardName}.{tableLittleName}Dao")
+public class {tableName}Dao {
+    private static final String SQLID = "com.ziroom.{systemName}.{moduleName}.dao.{tableName}Dao";
+
+    @Resource(name = "{standardName}.MybatisDaoContext")
+    private MybatisDaoContext mybatisDaoContext;
+
+    public PagingResult<{tableName}Entity> search({tableName}SearchOptions options) {
+        return mybatisDaoContext.findForPage(SQLID + ".search", {tableName}Entity.class, options, parsePageBounds(options));
+    }
+
+    public {tableName}Entity insert({tableName}Entity {tableLittleName}Entity) {
+        mybatisDaoContext.save(SQLID + ".insert", {tableLittleName}Entity);
+        return {tableLittleName}Entity;
+    }
+
+    public void update({tableName}Entity {tableLittleName}Entity) {
+        mybatisDaoContext.update(SQLID + ".updateByLogicCode", {tableLittleName}Entity);
+    }
+
+    public void softDelete(String logicCode, String operatorCode) {
+        {tableName}Entity entity = new {tableName}Entity();
+        entity.setLogicCode(logicCode);
+        entity.setModifyUserCode(operatorCode);
+        entity.setLastModifyTime(Utils.nowTime());
+        mybatisDaoContext.update(SQLID + ".softDelete", entity);
+    }
+
+    public {tableName}Entity findByLogicCode(String logicCode) {
+        return mybatisDaoContext.findOne(SQLID + ".findByLogicCode", {tableName}Entity.class, logicCode);
+    }
+}

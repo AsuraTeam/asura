@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <comment>HanLP 扩展配置</comment>
+    <!--用户可以在这里配置远程扩展字典 -->
+    <entry key="remote_ext_dict">http://zmcapi.d.ziroom.com/key-words/hot-update/HOT_UPDATE_FOR_USED</entry>
+    <!--用户可以在这里配置远程扩展停止词字典-->
+    <entry key="remote_ext_stopwords">http://zmcapi.d.ziroom.com/key-words/hot-update/HOT_UPDATE_FOR_STOP</entry>
+    <!--用户可以在这里配置远程同义词字典-->
+    <entry key="remote_ext_synonyms">http://10.30.27.16:8080/demo/synonyms</entry>
+</properties>
